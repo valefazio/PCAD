@@ -21,13 +21,17 @@ int main() {
 
     pthread_t filo[bacchette_disponibili];    //creazione 5 thread, uno per filosofo
     for(int i=0; i<bacchette_disponibili; i++){
-        int* n = &i;
+		int x = i;
+        int* n = &x;
         pthread_create(&filo[i], NULL, filosofo, n);
     }
     for(int i=0; i<bacchette_disponibili; i++){
         pthread_join(filo[i], NULL);
     }
 
+	for(int i=0; i<bacchette_disponibili; i++){
+		pthread_mutex_destroy(&bacchette[i]);
+	}
     return 0;
 }
 
@@ -40,14 +44,14 @@ void initializza_bacchette() {
 void *filosofo(void* i) {
     int times = 0;
     int n = *(int*)i;
-    while (times < numero_pasti) {
+    //while (times < numero_pasti) {
         pensa(n);
         prendi_bacchetta_sinistra(n);
         prendi_bacchetta_destra(n);
         mangia(n);
         rilascia_bacchette(n);
         times++;
-    }
+    //}
 }
 
 void pensa(int n) {
@@ -71,9 +75,6 @@ void mangia(int n) {
 }
 
 void rilascia_bacchette(int n) {
-    /*pthread_mutex_lock(&mutex);
-    bacchette_disponibili += 2;
-    pthread_cond_signal(&cond);*/
     pthread_mutex_unlock(&bacchette[n]);
     pthread_mutex_unlock(&bacchette[(n+1)%bacchette_disponibili]);
     printf("Filosofo %d: ha rilasciato le sue due bacchetta\n", n);
