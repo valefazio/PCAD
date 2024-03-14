@@ -6,8 +6,7 @@
 void initializza_bacchette();
 void *filosofo(void*);
 void pensa(int);
-void prendi_bacchetta_sinistra(int);
-void prendi_bacchetta_destra(int);
+void prendi_bacchette(int);
 void mangia(int);
 void rilascia_bacchette(int);
 
@@ -19,19 +18,30 @@ pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 int main() {
     initializza_bacchette();
 
-    pthread_t filo[bacchette_disponibili];    //creazione 5 thread, uno per filosofo
-    for(int i=0; i<bacchette_disponibili; i++){
-		int x = i;
-        int* n = &x;
-        pthread_create(&filo[i], NULL, filosofo, n);
-    }
-    for(int i=0; i<bacchette_disponibili; i++){
-        pthread_join(filo[i], NULL);
-    }
+    pthread_t filo[bacchette_disponibili];
 
-	for(int i=0; i<bacchette_disponibili; i++){
-		pthread_mutex_destroy(&bacchette[i]);
-	}
+    /*Abbiamo notato che se i thread vengono creati all'interno di un ciclo for,
+    il programma non termina correttamente. Questo potrebbe essere dovuto al fatto che il 
+    programma è multithreaded e l'ordine in cui vengono eseguiti i thread non è garantito.*/
+    
+    pthread_create(&filo[0], NULL, filosofo, (void*) &(int){0});
+    pthread_create(&filo[1], NULL, filosofo, (void*) &(int){1});
+    pthread_create(&filo[2], NULL, filosofo, (void*) &(int){2});
+    pthread_create(&filo[3], NULL, filosofo, (void*) &(int){3});
+    pthread_create(&filo[4], NULL, filosofo, (void*) &(int){4});
+    
+    pthread_join(filo[0], NULL);
+    pthread_join(filo[1], NULL);
+    pthread_join(filo[2], NULL);
+    pthread_join(filo[3], NULL);
+    pthread_join(filo[4], NULL);
+
+	pthread_mutex_destroy(&bacchette[0]);
+    pthread_mutex_destroy(&bacchette[1]);
+    pthread_mutex_destroy(&bacchette[2]);
+    pthread_mutex_destroy(&bacchette[3]);
+    pthread_mutex_destroy(&bacchette[4]);
+    
     return 0;
 }
 
@@ -44,27 +54,23 @@ void initializza_bacchette() {
 void *filosofo(void* i) {
     int times = 0;
     int n = *(int*)i;
-    //while (times < numero_pasti) {
+    while (times < numero_pasti) {
         pensa(n);
-        prendi_bacchetta_sinistra(n);
-        prendi_bacchetta_destra(n);
+        prendi_bacchette(n);
         mangia(n);
         rilascia_bacchette(n);
-        times++;
-    //}
+        times++;        
+    }
 }
 
 void pensa(int n) {
     printf("Filosofo %d: sta pensando\n", n);
-    sleep(1);
+    sleep(n);
 }
 
-void prendi_bacchetta_sinistra(int n) {
+void prendi_bacchette(int n) {
     pthread_mutex_lock(&bacchette[n]);
     printf("Filosofo %d: ha la bacchetta sinistra\n", n);
-}
-
-void prendi_bacchetta_destra(int n) {
     pthread_mutex_lock(&bacchette[(n+1)%bacchette_disponibili]);
     printf("Filosofo %d: ha la bacchetta destra\n", n);
 }
