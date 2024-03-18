@@ -24,6 +24,10 @@ int main() {
     pthread_create(&filo[2], NULL, filosofo, (void*) &(int){2});
     pthread_create(&filo[3], NULL, filosofo, (void*) &(int){3});
     pthread_create(&filo[4], NULL, filosofo, (void*) &(int){4});
+    /* for (int i = 0; i < bacchette_disponibili; i++) {
+        void* arg = (void*) &(int){i};
+        pthread_create(&filo[i], NULL, filosofo,  arg);
+    } */
     
     pthread_join(filo[0], NULL);
     pthread_join(filo[1], NULL);
@@ -66,6 +70,7 @@ void pensa(int n) {
 void prendi_bacchette(int n) {
     pthread_mutex_lock(&bacchette[n]);
     printf("Filosofo %d: ha la bacchetta sinistra\n", n);
+    //sleep(1);
     pthread_mutex_lock(&bacchette[(n+1)%bacchette_disponibili]);
     printf("Filosofo %d: ha la bacchetta destra\n", n);
 }
