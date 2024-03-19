@@ -19,16 +19,12 @@ int main() {
     initializza_bacchette();
 
     pthread_t filo[bacchette_disponibili];
-
-    /*Abbiamo notato che se i thread vengono creati all'interno di un ciclo for,
-    il programma non termina correttamente. Questo potrebbe essere dovuto al fatto che il 
-    programma è multithreaded e l'ordine in cui vengono eseguiti i thread non è garantito.*/
     
-    pthread_create(&filo[0], NULL, filosofo, (void*) &(int){0});
-    pthread_create(&filo[1], NULL, filosofo, (void*) &(int){1});
-    pthread_create(&filo[2], NULL, filosofo, (void*) &(int){2});
-    pthread_create(&filo[3], NULL, filosofo, (void*) &(int){3});
-    pthread_create(&filo[4], NULL, filosofo, (void*) &(int){4});
+    for (int i = 0; i < bacchette_disponibili; i++) {
+		void* arg = malloc(sizeof(int));
+		*(int*)arg = i;
+        pthread_create(&filo[i], NULL, filosofo,  arg);
+    }
     
     pthread_join(filo[0], NULL);
     pthread_join(filo[1], NULL);
@@ -54,7 +50,7 @@ void initializza_bacchette() {
 void *filosofo(void* i) {
     int times = 0;
     int n = *(int*)i;
-    while (times < numero_pasti) {
+    while (times < 1) {
         pensa(n);
         prendi_bacchette(n);
         mangia(n);
