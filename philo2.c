@@ -50,7 +50,7 @@ void initializza_bacchette() {
 void *filosofo(void* i) {
     int times = 0;
     int n = *(int*)i;
-    while (times < 1) {
+    while (times < numero_pasti) {
         pensa(n);
         prendi_bacchette(n);
         mangia(n);

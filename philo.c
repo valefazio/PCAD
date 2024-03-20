@@ -19,11 +19,6 @@ int main() {
     initializza_bacchette();
 
     pthread_t filo[bacchette_disponibili];
-    /* pthread_create(&filo[0], NULL, filosofo, (void*) &(int){0});
-    pthread_create(&filo[1], NULL, filosofo, (void*) &(int){1});
-    pthread_create(&filo[2], NULL, filosofo, (void*) &(int){2});
-    pthread_create(&filo[3], NULL, filosofo, (void*) &(int){3});
-    pthread_create(&filo[4], NULL, filosofo, (void*) &(int){4}); */
     for (int i = 0; i < bacchette_disponibili; i++) {
 		void* arg = malloc(sizeof(int));
 		*(int*)arg = i;
