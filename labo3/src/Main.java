@@ -1,8 +1,8 @@
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         //RWbasic rw = new RWbasic();
-		RWexclusive rw = new RWexclusive();
-		//RW rw = new RW();
+		//RWexclusive rw = new RWexclusive();
+		RW rw = new RW();
 
         Reader reader = new Reader(rw);
         Writer writer = new Writer(rw);
@@ -15,10 +15,12 @@ public class Main {
         }
         for(int i=0; i<50; i++) {
             threads_writer[i].start();
-            /* threads_writer[i].join();*/
-            Thread.sleep(100);
+            //Thread.sleep(100);
             threads_reader[i].start();
-			threads_reader[i].join();
-        }        
+        }
+        for(int i=0; i<50; i++) {
+            threads_writer[i].join();
+            threads_reader[i].join();
+        }
     }
 }

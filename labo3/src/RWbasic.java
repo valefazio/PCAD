@@ -6,11 +6,11 @@ public class RWbasic {
 		tmp++;
         Thread.sleep(1000);
 		data = tmp;
-		System.out.println("-" + Thread.currentThread().getName() + " ha scritto " + data);
+		System.out.println("  " + Thread.currentThread().getName() + " ha scritto " + data);
 	}
 
 	public int read() {
-		System.out.println("-" + Thread.currentThread().getName() + " ha letto ");
+		System.out.println("  " + Thread.currentThread().getName() + " ha letto ");
 		return data;
 	}
 }

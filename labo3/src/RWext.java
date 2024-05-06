@@ -1,9 +1,10 @@
-public class RW extends RWbasic {
+public class RWext extends RWbasic {
     boolean readyToWrite = true;
+	boolean read = true;
 
     public synchronized void write() throws InterruptedException {
         try {
-            while (readyToWrite == false) {
+            while (readyToWrite == false || !read) {
                 wait();
             }
             readyToWrite = false;
@@ -11,6 +12,7 @@ public class RW extends RWbasic {
             int tmp = data;
             tmp++;
             data = tmp;
+			read = false;
         } catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
@@ -20,11 +22,12 @@ public class RW extends RWbasic {
 
     public synchronized int read() {
         try {
-            while (readyToWrite == true) {
+            while (readyToWrite == true || read) {
 				System.out.println("    Reader " + Thread.currentThread().getName() + " aspetta");
                 wait();
             }
             readyToWrite = true;
+			read = true;
             notifyAll();
         } catch (Exception e) {
             System.out.println(e);

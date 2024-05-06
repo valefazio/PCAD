@@ -1,9 +1,9 @@
 public class Reader implements Runnable {
     //private RWbasic rw;
-	private RWexclusive rw;
-	//private RW rw;
+	//private RWexclusive rw;
+	private RW rw;
 
-    Reader(/* RWbasic */ RWexclusive /* RW */ rw) {
+    Reader(/* RWbasic */ /* RWexclusive */ RW rw) {
         this.rw = rw;
     }
 

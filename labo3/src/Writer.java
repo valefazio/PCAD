@@ -1,9 +1,9 @@
 public class Writer implements Runnable{
     //private RWbasic rw;
-    private RWexclusive rw;
-    //private RW rw;
+    //private RWexclusive rw;
+    private RW rw;
 
-    Writer(/* RWbasic */ RWexclusive /* RW */ rw) {
+    Writer(/* RWbasic */ /* RWexclusive */ RW rw) {
         this.rw = rw;
     }
 
