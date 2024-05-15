@@ -1,13 +1,13 @@
 import java.net.*;
-import java.io.*;
 
-public class ServerEchoConcur {
+public class ServerMain {
     public static void main(String[] args) {
         try {
             try (ServerSocket server = new ServerSocket(4242)) {
                 while (true) {
                     Socket socket = server.accept();
-                    ServiceEcho serv = new ServiceEcho(socket);
+                    //Server serv = new Server(socket);
+                    ServerLimited serv = new ServerLimited(socket);
                     Thread t = new Thread(serv);
                     t.start();
                 }

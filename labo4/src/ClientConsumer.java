@@ -15,7 +15,10 @@ public class ClientConsumer {
             String mess = br.readLine();
             System.out.println("S: " + mess);
             
-            // Read from the server until the server sends a ******** message
+            do {
+                mess = br.readLine();
+            } while (mess == null || mess.equals(""));
+            System.out.println("C: '" + mess + "'");
 
             pw.close();
             br.close();

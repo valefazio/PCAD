@@ -13,17 +13,17 @@ public class ClientProducer {
 
             pw.println("producer\n");
             pw.flush();
-            String mess = br.readLine();
+            String mess;
+			do {
+				mess = br.readLine();
+			} while (mess == null || mess.equals(""));
             System.out.println("S: " + mess);
 
-			do {
-				System.out.println("Inserire stringa o '0' per uscire");
-				strToInsert = System.console().readLine();
-				pw.println(strToInsert);
-                pw.flush();
-			} while(strToInsert!=null && !strToInsert.equals("0"));
-
+			System.out.print("Inserire stringa: ");
+            strToInsert = System.console().readLine();
+            pw.println(strToInsert);
             pw.flush();
+
             pw.close();
             br.close();
             socket.close();
