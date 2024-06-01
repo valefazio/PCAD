@@ -1,24 +1,31 @@
-import java.util.LinkedList;
-import java.util.concurrent.Semaphore;
-
-public class Elfi {
-    private final static int nElfi = 9;
-	private final static int elfiPerVolta = 3;
-	protected static Barrier elfiXBabboNatale = new Barrier(elfiPerVolta);
-	protected static LinkedList<Thread> elfiInAttesa = new LinkedList<Thread>();
-	
-	public void run() throws InterruptedException{
+public class Elfi extends Natale implements Runnable{
+	public void run(){
 		while(true) {
-			System.out.println("Elfo " + Thread.currentThread().getId() + " costruisce un giocattolo");
-			Thread.sleep(1000);
-			System.out.println("Elfo " + Thread.currentThread().getId() + " ha trovato un problema e va da Babbo Natale");
-			//prendere un ticket
+			try {
+				System.out.println("Elfo " + Thread.currentThread().getId() + " costruisce un giocattolo");
+				Thread.sleep(1000);
 
-			elfiXBabboNatale.awaitInList(elfiInAttesa);
-			System.out.println("Elfo " + Thread.currentThread().getId() + " ha svegliato Babbo Natale");
-			//Babbo Natale aggiusta il giocattolo
-			System.out.println("Elfo " + Thread.currentThread().getId() + " torna a costruire giocattoli");
-			Thread.sleep(1000);
+				System.out.println("Elfo " + Thread.currentThread().getId() + " aspetta Babbo Natale");
+				codaElfi.acquire();
+				int n_elfo = elfiXBabboNatale.await();
+
+				if (n_elfo == 0) {	// ultimo elfo
+					synchronized (svegliaBabboNatale) {
+						attenzioneBabboNatale.acquire();
+						svegliaBabboNatale.notify();
+					}
+				}
+				synchronized (babboPronto) {
+					babboPronto.wait();
+				}
+
+				// Elfo sta imparando
+				Thread.sleep(3000);
+				if(n_elfo == 0)
+					attenzioneBabboNatale.release();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
