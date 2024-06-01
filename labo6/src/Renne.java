@@ -8,10 +8,10 @@ public class Renne extends Natale implements Runnable {
     public void run() {
         while (true) {
             try {
-                System.out.println("Renna " + Thread.currentThread().getId() + " va in vacanza");
+                System.out.println("\t\t\t\t\tRenna " + Thread.currentThread().getId() + " va in vacanza");
                 Thread.sleep(1000 + generator.nextInt(2000));
 
-                System.out.println("Renna " + Thread.currentThread().getId() + " è tornata e aspetta");
+                System.out.println("\t\t\t\t\tRenna " + Thread.currentThread().getId() + " è tornata e aspetta");
                 n_renna = renneXBabboNatale.await();
 
                 if (n_renna == 0) { // ultima renna
@@ -24,19 +24,11 @@ public class Renne extends Natale implements Runnable {
                         lock.unlock();
                     }
                 }
-				
-                /* lock.lock();
-                try {
-                    babboPronto.await();
-                } finally {
-                    lock.unlock();
-                } */
 
                 // Renne in distribuzione pacchi
-                Thread.sleep(3000);
+                Thread.sleep(5000);
                 if(n_renna == 0) {
                     attenzioneBabboNatale.release();
-					System.out.println("Renne hanno consegnato i regali");
 				}
 	        } catch (InterruptedException | BrokenBarrierException e) {
             	e.printStackTrace();
